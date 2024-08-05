@@ -35,21 +35,12 @@ public class Ship {
         return list;
     }
 
-    public void hit(int position) {
-        if (position >= 0 && position < length && whereHit.get(position) == 0) {
-            whereHit.set(position, 1);
+    public void hit() {
             hits++;
-            if (hits >= length) {
+            if (hits == length) {
                 sunken = true;
             }
-        }
+
     }
 
-    public boolean isHit(int position) {
-        return position >= 0 && position < length && whereHit.get(position) == 1;
-    }
-
-    public static void main(String[] args) {
-        Ship ship = new Ship(6, "B");
-    }
 }
