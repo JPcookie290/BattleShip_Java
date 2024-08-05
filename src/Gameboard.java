@@ -6,7 +6,7 @@ public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
     private Map<String, Ship> ships;
-    private String[][] board;
+    public String[][] board;
     public ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
@@ -43,12 +43,14 @@ public class Gameboard {
                 for (int col = startCol; col <= endCol; col++) {
                     ships.put("" + start.charAt(0) + (col + 1), ship);
                     board[startRow][col] = ship.symbol;
+                    ship.setCurrentPos(startRow, col);
                 }
             // Vertical
             } else {
                 for (int row = startRow; row <= endRow; row++) {
                     ships.put((char) ('A' + row) + start.substring(1), ship);
                     board[row][startCol] = ship.symbol;
+                    ship.setCurrentPos(row, startCol);
                 }
             }
             return true;
@@ -77,6 +79,7 @@ public class Gameboard {
             //int hitIndex = (row == col ? col : row);
             ship.hit();
             board[row][col] = "XX";
+            System.out.println(ship.getCurrentPos());
             return ship;
 
         } else {
@@ -116,6 +119,7 @@ public class Gameboard {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
 }

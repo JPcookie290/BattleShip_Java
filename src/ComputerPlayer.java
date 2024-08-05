@@ -1,28 +1,47 @@
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class ComputerPlayer extends Player {
-    private Set<String> attemptedShots;
+    private ArrayList<ArrayList<Integer>> shotsTaken;
     private Random random;
-    private int boardSize;
-    private ArrayList<String> availableShots;
+
 
     public ComputerPlayer(String name, Gameboard gameboard, Gameboard enemyBoard) {
         super(name, gameboard, enemyBoard);
-        this.attemptedShots = new HashSet<>();
+        this.shotsTaken = new ArrayList<>();
         this.random = new Random();
-        this.boardSize = gameboard.getSize();
         //this.availableSots = getAvailableShots();
     }
 
     //public ArrayList<String> getAvailableShots(){};
 
-    //public void takeRandomShot() {}
+    public void takeRandomShot() {
+        Random rand = new Random();
+        int randomCol = rand.nextInt(10);
+        int randomRow = random.nextInt(10);
+        ArrayList<Integer> randomShot = new ArrayList<Integer>();
+        randomShot.add(randomCol);
+        randomShot.add(randomRow);
+
+        if (shotsTaken.contains(randomShot)){
+            takeRandomShot();
+        } else {
+            shotsTaken.add(randomShot);
+        }
+
+        //System.out.println("col: " + randomCol + " row: " + randomRow);
+        if ( enemyBoard.board[randomCol][randomRow].contains("~~")) {
+            enemyBoard.board[randomCol][randomRow] = "oo";
+        } else {
+            enemyBoard.board[randomCol][randomRow] = "XX";
+        }
+    }
+
+    // public void placeShips(){...}
 
     // Test static/no random
-    public void placeShips(){
+    public void placeShipsTest(){
         // Carrier
         gameboard.placeShip("J2", "J6", gameboard.shipList.get(0));
         // Battleships
@@ -40,7 +59,6 @@ public class ComputerPlayer extends Player {
 
     }
 
-
     public static void main(String[] args) {
         // initialize game boards
         Gameboard pb = new Gameboard(10);
@@ -51,19 +69,21 @@ public class ComputerPlayer extends Player {
         ComputerPlayer pc = new ComputerPlayer("pc", cb, pb);
 
         // place computer ships for test
-        pc.placeShips();
+        pc.placeShipsTest();
 
         // place player ships
         player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(0));
         player.gameboard.placeShip("A2", "A5", player.gameboard.shipList.get(1));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(2));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(3));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(4));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(5));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(6));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(7));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(8));
-        player.gameboard.placeShip("B10", "F10", player.gameboard.shipList.get(9));
+        player.gameboard.placeShip("G6", "J6", player.gameboard.shipList.get(2));
+        player.gameboard.placeShip("G1", "I1", player.gameboard.shipList.get(3));
+        player.gameboard.placeShip("E3", "E5", player.gameboard.shipList.get(4));
+        player.gameboard.placeShip("A8", "C8", player.gameboard.shipList.get(5));
+        player.gameboard.placeShip("J9", "J10", player.gameboard.shipList.get(6));
+        player.gameboard.placeShip("H10", "I10", player.gameboard.shipList.get(7));
+        player.gameboard.placeShip("C1", "D1", player.gameboard.shipList.get(8));
+        player.gameboard.placeShip("I4", "I5", player.gameboard.shipList.get(9));
+
+        //----------------- test information's -----------------//
 
         // player takes shots
         player.takeShot("A1");
@@ -72,15 +92,21 @@ public class ComputerPlayer extends Player {
         player.takeShot("B4");
         player.takeShot("A3");
 
+        // random shots Computer
+        pc.takeRandomShot();
+        pc.takeRandomShot();
+        pc.takeRandomShot();
+        pc.takeRandomShot();
+        pc.takeRandomShot();
+
+        //----------------- Current Output -----------------//
         // print computer board
-        System.out.println("Computer:");
-        pc.gameboard.printBoard();
+        System.out.println("Computer Ships:");
+        //pc.gameboard.printBoard();
+
         // print computer board
-        System.out.println("Player:");
-        player.gameboard.printBoard();
-        // other informations
-        //System.out.println(cb.shipList.size());
-        //System.out.println(pc.gameboard.getMissedShots());
+        System.out.println("Player Ships:");
+        //player.gameboard.printBoard();
 
     }
 }

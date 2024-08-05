@@ -4,14 +4,17 @@ public class Main {
         Gameboard cb = new Gameboard(10);
         Player player = new Player("test", pb, cb);
         ComputerPlayer pc = new ComputerPlayer("pc", cb, pb);
-        pc.placeShips();
+        pc.placeShipsTest();
 
         player.takeShot("A1");
         player.takeShot("A4");
         player.takeShot("A5");
         player.takeShot("B4");
         player.takeShot("A3");
-        pc.gameboard.printBoard();
+
+
+        // Test
+
         //System.out.println(cb.shipList.size());
         //System.out.println(pc.gameboard.getMissedShots());
 

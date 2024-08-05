@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Ship {
     private int length;
     private int hits;
-    private ArrayList<Integer> whereHit;
+    private ArrayList<ArrayList<Integer>> currentPos;
     public boolean sunken;
     public String symbol;
 
@@ -11,7 +11,7 @@ public class Ship {
         this.length = length;
         this.hits = 0;
         this.symbol = symbol;
-        this.whereHit = getHitList();
+        this.currentPos = new ArrayList<>();
         this.sunken = false;
     }
 
@@ -19,21 +19,30 @@ public class Ship {
         return length;
     }
 
-    public ArrayList<Integer> getWhereHit() {
-        return whereHit;
+    public ArrayList<ArrayList<Integer>> getCurrentPos() {
+        return currentPos;
     }
 
     public boolean isSunken() {
         return sunken;
     }
 
-    private ArrayList<Integer> getHitList() {
-        ArrayList<Integer> list = new ArrayList<>();
+/*        ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < getLength(); i++) {
             list.add(0);
         }
         return list;
     }
+
+ */
+
+    public void setCurrentPos(Integer posX, Integer posY) {
+        ArrayList<Integer> positions = new ArrayList<>();
+        positions.add(posX);
+        positions.add(posY);
+        currentPos.add(positions);
+    }
+    public void positionHit(){}
 
     public void hit() {
             hits++;
