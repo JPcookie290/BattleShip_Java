@@ -20,9 +20,13 @@ public class Player {
     public String takeShot(int row, int col) {
         String result = enemyBoard.takeShot(row, col);
         if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
-            for (Ship ship : enemyBoard.shipList) {
+            for (Ship ship : enemyBoard.getShipList()) {
                 if (ship.isSunken()) {
-                    enemyBoard.shipList.remove(ship);
+                    enemyBoard.removeShip(ship);
+                    if (checkWon()){
+                        System.out.println(name + "has won!");
+                    }
+
                     break;
                 }
             }
@@ -31,6 +35,6 @@ public class Player {
     }
 
     public boolean checkWon() {
-        return enemyBoard.shipList.isEmpty();
+        return enemyBoard.getShipList().isEmpty();
     }
 }

@@ -6,7 +6,7 @@ public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
     private String[][] board;
-    ArrayList<Ship> shipList;
+    private ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
         this.size = size;
@@ -50,9 +50,9 @@ public class Gameboard {
                     ship.setCurrentPos(row, startCol);
                 }
             }
-            shipList.add(ship);
             return true;
         }
+
         return false;
     }
 
@@ -89,33 +89,39 @@ public class Gameboard {
             for (Ship ship : shipList) {
                 for (ArrayList<Integer> pos : ship.getCurrentPos()) {
                     if (pos.get(0) == row && pos.get(1) == col) {
-                        ship.hit();
+                        ship.hit(row, col);
                         board[row][col] = "XX";
                         return ship.isSunken() ? "Hit and sunk!" : "Hit!";
                     }
                 }
             }
         }
-        return "Error!";
+        return "Error";
     }
 
     public ArrayList<Ship> createShips() {
         ArrayList<Ship> list = new ArrayList<>();
         // Carrier
-        list.add(new Ship(5, "C1"));
+        list.add(new Ship(5, "C1", "Carrier"));
         // Battleships
-        list.add(new Ship(4, "B1"));
-        list.add(new Ship(4, "B2"));
+        list.add(new Ship(4, "B1", "Battle Ship"));
+        list.add(new Ship(4, "B2", "Battle Ship"));
         // Submarine
-        list.add(new Ship(3, "S1"));
-        list.add(new Ship(3, "S2"));
-        list.add(new Ship(3, "S3"));
+        list.add(new Ship(3, "S1","Submarine"));
+        list.add(new Ship(3, "S2","Submarine"));
+        list.add(new Ship(3, "S3","Submarine"));
         // Destroyer
-        list.add(new Ship(2, "D1"));
-        list.add(new Ship(2, "D2"));
-        list.add(new Ship(2, "D3"));
-        list.add(new Ship(2, "D4"));
+        list.add(new Ship(2, "D1","Destroyer"));
+        list.add(new Ship(2, "D2","Destroyer"));
+        list.add(new Ship(2, "D3","Destroyer"));
+        list.add(new Ship(2, "D4","Destroyer"));
         return list;
+    }
+
+    public ArrayList<Ship> getShipList() { return shipList; }
+
+    public void removeShip(Ship ship){
+        shipList.remove(ship);
     }
 
     public ArrayList<String> getMissedShots() {

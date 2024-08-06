@@ -1,18 +1,21 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Ship {
-    private int length;
+    private final int length;
     private int hits;
     private ArrayList<ArrayList<Integer>> currentPos;
     public boolean sunken;
     public String symbol;
+    public String title;
 
-    public Ship(int length, String symbol) {
+    public Ship(int length, String symbol, String title) {
         this.length = length;
         this.hits = 0;
         this.symbol = symbol;
         this.currentPos = new ArrayList<>();
         this.sunken = false;
+        this.title = title;
     }
 
     public int getLength() {
@@ -27,14 +30,19 @@ public class Ship {
         return sunken;
     }
 
-    public void setCurrentPos(int posX, int posY) {
+    public void setCurrentPos(int row, int col) {
         ArrayList<Integer> positions = new ArrayList<>();
-        positions.add(posX);
-        positions.add(posY);
+        positions.add(row);
+        positions.add(col);
         currentPos.add(positions);
     }
 
-    public void hit() {
+    public void hit(int row, int col) {
+        ArrayList<Integer> takenHit = new ArrayList<>();
+        takenHit.add(row);
+        takenHit.add(col);
+
+        currentPos.set(currentPos.indexOf(takenHit), new ArrayList<>(Arrays.asList( -1, -1)));
         hits++;
         if (hits == length) {
             sunken = true;
