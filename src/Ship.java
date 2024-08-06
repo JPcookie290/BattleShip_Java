@@ -27,29 +27,18 @@ public class Ship {
         return sunken;
     }
 
-/*        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < getLength(); i++) {
-            list.add(0);
-        }
-        return list;
-    }
-
- */
-
-    public void setCurrentPos(Integer posX, Integer posY) {
+    public void setCurrentPos(int posX, int posY) {
         ArrayList<Integer> positions = new ArrayList<>();
         positions.add(posX);
         positions.add(posY);
         currentPos.add(positions);
     }
-    public void positionHit(){}
 
     public void hit() {
-            hits++;
-            if (hits == length) {
-                sunken = true;
-            }
-
+        hits++;
+        if (hits == length) {
+            sunken = true;
+        }
     }
-
 }
+
