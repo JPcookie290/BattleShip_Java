@@ -1,10 +1,7 @@
-import java.util.ArrayList;
-
 public class Player {
     protected String name;
     protected Gameboard gameboard;
-    public  Gameboard enemyBoard;
-
+    public Gameboard enemyBoard;
 
     public Player(String name, Gameboard gameboard, Gameboard enemyBoard) {
         this.name = name;
@@ -20,26 +17,24 @@ public class Player {
         return gameboard;
     }
 
+    public String takeShot(int row, int col) {
+        String result = enemyBoard.takeShot(row, col);
+        if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
+            for (Ship ship : enemyBoard.getShipList()) {
+                if (ship.isSunken()) {
+                    enemyBoard.removeShip(ship);
+                    if (checkWon()){
+                        System.out.println(name + "has won!");
+                    }
 
-    public String takeShot(String position) {
-        Ship ship = enemyBoard.takeShot(position);
-
-        if (ship != null) {
-            if (ship.isSunken()){
-                enemyBoard.shipList.remove(ship);
-                checkWon();
-                return "Sunken";
+                    break;
+                }
             }
-            return "Hit";
-        } else {
-            return "Miss";
         }
+        return result;
     }
 
-    public boolean checkWon(){
-        if (enemyBoard.shipList.isEmpty()){
-            return true;
-        };
-        return false;
+    public boolean checkWon() {
+        return enemyBoard.getShipList().isEmpty();
     }
 }

@@ -5,14 +5,12 @@ import java.util.Map;
 public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
-    private Map<String, Ship> ships;
-    public String[][] board;
-    public ArrayList<Ship> shipList;
+    private String[][] board;
+    private ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
         this.size = size;
         this.missed = new ArrayList<>();
-        this.ships = new HashMap<>();
         this.board = new String[size][size];
         this.shipList = createShips();
         createBoard();
@@ -30,83 +28,101 @@ public class Gameboard {
         return size;
     }
 
-    public boolean placeShip(String start, String end, Ship ship) {
+    public boolean placeShip(int startRow, int startCol, Ship ship, boolean isHorizontal) {
+        int endRow = startRow;
+        int endCol = startCol;
 
-        int startRow = start.charAt(0) - 'A';
-        int startCol = Integer.parseInt(start.substring(1)) - 1;
-        int endRow = end.charAt(0) - 'A';
-        int endCol = Integer.parseInt(end.substring(1)) - 1;
+        if (isHorizontal) {
+            endCol = startCol + ship.getLength() - 1;
+        } else {
+            endRow = startRow + ship.getLength() - 1;
+        }
 
         if (isPlacementValid(startRow, startCol, endRow, endCol, ship)) {
-            // Horizontal
-            if (startRow == endRow) {
+            if (isHorizontal) {
                 for (int col = startCol; col <= endCol; col++) {
-                    ships.put("" + start.charAt(0) + (col + 1), ship);
                     board[startRow][col] = ship.symbol;
                     ship.setCurrentPos(startRow, col);
                 }
-            // Vertical
             } else {
                 for (int row = startRow; row <= endRow; row++) {
-                    ships.put((char) ('A' + row) + start.substring(1), ship);
                     board[row][startCol] = ship.symbol;
                     ship.setCurrentPos(row, startCol);
                 }
             }
             return true;
         }
+
         return false;
     }
-
 
     private boolean isPlacementValid(int startRow, int startCol, int endRow, int endCol, Ship ship) {
-        // Horizontal
-        if (startRow == endRow) {
-            return endCol - startCol + 1 == ship.getLength();
-        // Vertical
-        } else if (startCol == endCol) {
-            return endRow - startRow + 1 == ship.getLength();
+        if (endRow >= size || endCol >= size) {
+            return false;
         }
-        return false;
-    }
-
-    public Ship takeShot(String position) {
-        int row = position.charAt(0) - 'A';
-        int col = Integer.parseInt(position.substring(1)) - 1;
-        //System.out.println(row + " " + col);
-        if (ships.containsKey(position)) {
-            Ship ship = ships.get(position);
-            //int hitIndex = (row == col ? col : row);
-            ship.hit();
-            board[row][col] = "XX";
-            System.out.println(ship.getCurrentPos());
-            return ship;
-
+        if (startRow == endRow) { // Horizontal placement
+            for (int col = startCol; col <= endCol; col++) {
+                if (!board[startRow][col].equals("~~")) {
+                    return false;
+                }
+            }
+        } else if (startCol == endCol) { // Vertical placement
+            for (int row = startRow; row <= endRow; row++) {
+                if (!board[row][startCol].equals("~~")) {
+                    return false;
+                }
+            }
         } else {
-            missed.add(position);
-            board[row][col] = "oo";
-            return null;
+            return false;
         }
+        return true;
     }
 
-    public ArrayList<Ship> createShips(){
-        ArrayList<Ship> list = new ArrayList<Ship>();
+    public String takeShot(int row, int col) {
+        if (board[row][col].equals("~~")) {
+            missed.add(row + "," + col);
+            board[row][col] = "oo";
+            return "Miss!";
+        } else if (board[row][col].contains("XX") || board[row][col].contains("oo")) {
+            return "Already shot here!";
+        } else {
+            for (Ship ship : shipList) {
+                for (ArrayList<Integer> pos : ship.getCurrentPos()) {
+                    if (pos.get(0) == row && pos.get(1) == col) {
+                        ship.hit(row, col);
+                        board[row][col] = "XX";
+                        return ship.isSunken() ? "Hit and sunk!" : "Hit!";
+                    }
+                }
+            }
+        }
+        return "Error";
+    }
+
+    public ArrayList<Ship> createShips() {
+        ArrayList<Ship> list = new ArrayList<>();
         // Carrier
-        list.add(new Ship(5, "C1"));
+        list.add(new Ship(5, "C1", "Carrier"));
         // Battleships
-        list.add(new Ship(4, "B1"));
-        list.add(new Ship(4, "B2"));
+        list.add(new Ship(4, "B1", "Battle Ship"));
+        list.add(new Ship(4, "B2", "Battle Ship"));
         // Submarine
-        list.add(new Ship(3, "S1"));
-        list.add(new Ship(3, "S2"));
-        list.add(new Ship(3, "S3"));
-        // 	Destroyer
-        list.add(new Ship(2, "D1"));
-        list.add(new Ship(2, "D2"));
-        list.add(new Ship(2, "D3"));
-        list.add(new Ship(2, "D4"));
+        list.add(new Ship(3, "S1","Submarine"));
+        list.add(new Ship(3, "S2","Submarine"));
+        list.add(new Ship(3, "S3","Submarine"));
+        // Destroyer
+        list.add(new Ship(2, "D1","Destroyer"));
+        list.add(new Ship(2, "D2","Destroyer"));
+        list.add(new Ship(2, "D3","Destroyer"));
+        list.add(new Ship(2, "D4","Destroyer"));
         return list;
-    };
+    }
+
+    public ArrayList<Ship> getShipList() { return shipList; }
+
+    public void removeShip(Ship ship){
+        shipList.remove(ship);
+    }
 
     public ArrayList<String> getMissedShots() {
         return missed;
@@ -121,5 +137,4 @@ public class Gameboard {
         }
         System.out.println();
     }
-
 }
