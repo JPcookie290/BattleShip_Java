@@ -8,7 +8,7 @@ public class Main {
 
         computer.placeShipsRandom();
 
-        playerBoard.placeShip(1, 9, playerBoard.getShipList().getFirst(), false);
+        playerBoard.placeShip(1, 9, playerBoard.getShipList().get(0), false);
         playerBoard.placeShip(0, 1, playerBoard.getShipList().get(1), true);
         playerBoard.placeShip(6, 5, playerBoard.getShipList().get(2), false);
         playerBoard.placeShip(6, 0, playerBoard.getShipList().get(3), false);

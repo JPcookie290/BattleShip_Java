@@ -1,11 +1,10 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
-    private String[][] board;
+    String[][] board;
     private ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
