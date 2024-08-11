@@ -6,21 +6,87 @@ import java.util.ArrayList;
 
 public class GameboardUI {
 
-    private static Gameboard playerBoard;
-    private static Gameboard computerBoard;
-    private static Player player;
-    private static ComputerPlayer computer;
-    private static boolean isPlacingShips = true;
-    private static Ship currentShip;
-    private static int shipIndex = 0;
+    private GameController controller;
+    private JPanel[][] playerPanels;
+    private JPanel[][] computerPanels;
+    private JLabel statusLabel;
+    private JCheckBox horizontalCheckBox;
 
-    // Method to create a 10x10 grid with panels
-    public static JPanel createGrid(JPanel[][] panels) {
+    public GameboardUI(GameController controller) {
+        this.controller = controller;
+    }
+
+    public void createAndShowGUI() {
+        JFrame frame = new JFrame("Battle Ships");
+        frame.setSize(900, 500);
+        frame.setLayout(new BorderLayout(10, 10));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        playerPanels = new JPanel[10][10];
+        computerPanels = new JPanel[10][10];
+
+        JPanel board1 = createGrid(playerPanels);
+        JPanel board2 = createGrid(computerPanels);
+
+        board1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        board2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        horizontalCheckBox = new JCheckBox("Horizontal");
+        horizontalCheckBox.setSelected(true);
+
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
+        controlPanel.add(horizontalCheckBox, BorderLayout.NORTH);
+
+        statusLabel = new JLabel("Place your ships on the board.", SwingConstants.CENTER);
+        frame.add(statusLabel, BorderLayout.NORTH);
+
+        // Player Panels
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                int finalI = i;
+                int finalJ = j;
+                playerPanels[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (controller.isPlacingShips()) {
+                            boolean isHorizontal = horizontalCheckBox.isSelected();
+                            controller.placePlayerShip(finalI, finalJ, isHorizontal);
+                        }
+                    }
+                });
+            }
+        }
+
+        // Computer Panels
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                int finalI = i;
+                int finalJ = j;
+                computerPanels[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        controller.playerClickOnComputerBoard(finalI, finalJ);
+                    }
+                });
+            }
+        }
+
+        JPanel boardsPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        boardsPanel.add(board1);
+        boardsPanel.add(board2);
+
+        frame.add(boardsPanel, BorderLayout.CENTER);
+        frame.add(controlPanel, BorderLayout.SOUTH);
+
+        frame.setVisible(true);
+    }
+
+    public JPanel createGrid(JPanel[][] panels) {
         JPanel grid = new JPanel();
-        grid.setPreferredSize(new Dimension(300, 300)); // Set the preferred size of the panel
-        grid.setLayout(new GridLayout(10, 10)); // Set layout as 10x10 grid
+        grid.setPreferredSize(new Dimension(300, 300));
+        grid.setLayout(new GridLayout(10, 10));
 
-        // Adding 100 panels to the grid
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 JPanel square = new JPanel();
@@ -33,105 +99,21 @@ public class GameboardUI {
         return grid;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Battle Ships"); // Create a new JFrame with title "Battle Ships"
-        frame.setSize(900, 500); // Set the size of the frame
-        frame.setLayout(new GridLayout(1, 3, 10, 10)); // Set layout as 1x3 grid with gaps
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set default close operation
-
-        playerBoard = new Gameboard(10);
-        computerBoard = new Gameboard(10);
-        player = new Player("Player", playerBoard, computerBoard);
-        computer = new ComputerPlayer("Computer", computerBoard, playerBoard);
-
-        computer.placeShipsRandom();
-
-        JPanel[][] playerPanels = new JPanel[10][10];
-        JPanel[][] computerPanels = new JPanel[10][10];
-
-        JPanel board1 = createGrid(playerPanels); // Create the first gameboard
-        JPanel board2 = createGrid(computerPanels); // Create the second gameboard
-
-        board1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add margin to the first board
-        board2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add margin to the second board
-
-        JCheckBox horizontalCheckBox = new JCheckBox("Horizontal");
-        horizontalCheckBox.setSelected(true);
-
-        JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new BorderLayout());
-        controlPanel.add(horizontalCheckBox, BorderLayout.NORTH);
-
-        JButton placeShipsButton = new JButton("Place Ships");
-        controlPanel.add(placeShipsButton, BorderLayout.SOUTH);
-
-        placeShipsButton.addActionListener(e -> {
-            if (isPlacingShips) {
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 0; j < 10; j++) {
-                        int finalI = i;
-                        int finalJ = j;
-                        playerPanels[i][j].addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                boolean isHorizontal = horizontalCheckBox.isSelected();
-                                currentShip = playerBoard.getShipList().get(shipIndex);
-                                if (playerBoard.placeShip(finalI, finalJ, currentShip, isHorizontal)) {
-                                    for (ArrayList<Integer> pos : currentShip.getCurrentPos()) {
-                                        playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.GRAY);
-                                    }
-                                    shipIndex++;
-                                    if (shipIndex >= playerBoard.getShipList().size()) {
-                                        isPlacingShips = false;
-                                        placeShipsButton.setText("Start Game");
-                                        placeShipsButton.setEnabled(false);
-                                        enableComputerBoard(computerPanels, playerPanels, frame);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
-
-        frame.add(board1); // Add the first gameboard to the frame
-        frame.add(controlPanel); // Add the control panel to the frame
-        frame.add(board2); // Add the second gameboard to the frame
-
-        frame.setVisible(true); // Make the frame visible
-    }
-
-    private static void enableComputerBoard(JPanel[][] computerPanels, JPanel[][] playerPanels, JFrame frame) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                int finalI = i;
-                int finalJ = j;
-                computerPanels[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        String result = player.takeShot(finalI, finalJ);
-                        if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
-                            computerPanels[finalI][finalJ].setBackground(Color.RED);
-                        } else if (result.equals("Miss!")) {
-                            computerPanels[finalI][finalJ].setBackground(Color.WHITE);
-                        }
-                        computer.takeRandomShot();
-                        updatePlayerBoard(playerPanels);
-                        if (player.checkWon()) {
-                            JOptionPane.showMessageDialog(frame, "Player won!");
-                            frame.dispose();
-                        } else if (computer.checkWon()) {
-                            JOptionPane.showMessageDialog(frame, "Computer won!");
-                            frame.dispose();
-                        }
-                    }
-                });
-            }
+    public void updatePlayerShipPlacement(Ship ship) {
+        for (ArrayList<Integer> pos : ship.getCurrentPos()) {
+            playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.GRAY);
         }
     }
 
-    private static void updatePlayerBoard(JPanel[][] playerPanels) {
+    public void updateAfterPlayerShot(int row, int col, String result) {
+        if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
+            computerPanels[row][col].setBackground(Color.RED);
+        } else if (result.equals("Miss!")) {
+            computerPanels[row][col].setBackground(Color.WHITE);
+        }
+    }
+
+    public void updateAfterComputerShot(Gameboard playerBoard) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (playerBoard.board[i][j].equals("XX")) {
@@ -141,5 +123,47 @@ public class GameboardUI {
                 }
             }
         }
+    }
+
+    public void showSunkMessage(Ship sunkenShip, String whoSunk) {
+        if (sunkenShip != null) {
+            statusLabel.setText(whoSunk + " sunk a " + sunkenShip.title + "!");
+            for (ArrayList<Integer> pos : sunkenShip.getCurrentPos()) {
+                if (whoSunk.equals("Player")) {
+                    computerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
+                } else {
+                    playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
+                }
+            }
+        }
+    }
+
+    public void showGameEndMessage(String message) {
+        int response = JOptionPane.showConfirmDialog(null, message + " Would you like to play again?", "Game Over",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            restartGame();
+        } else {
+            System.exit(0);
+        }
+    }
+
+    private void restartGame() {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(statusLabel);
+        frame.getContentPane().removeAll();
+        controller = new GameController(); // new Game COntroller
+        frame.dispose();
+    }
+
+    public void startGame() {
+        updateStatusLabel("All ships placed. Game started!");
+    }
+
+    public void updateStatusLabel(String message) {
+        statusLabel.setText(message);
+    }
+
+    public boolean isPlacingShips() {
+        return controller.isPlacingShips();
     }
 }

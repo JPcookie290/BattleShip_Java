@@ -4,6 +4,7 @@ import java.util.Random;
 public class ComputerPlayer extends Player {
     private ArrayList<ArrayList<Integer>> shotsTaken;
     private Random random;
+    private Ship lastSunkenShip;
 
     public ComputerPlayer(String name, Gameboard gameboard, Gameboard enemyBoard) {
         super(name, gameboard, enemyBoard);
@@ -26,21 +27,15 @@ public class ComputerPlayer extends Player {
         shotsTaken.add(shot);
         String result = takeShot(row, col);
         System.out.println("Computer shot at (" + row + ", " + col + "): " + result);
+
+        if (result.equals("Hit and sunk!")) {
+            lastSunkenShip = getLastSunkenShip();
+        }
     }
 
-    /*    public void placeShipsTest() {
-          /*gameboard.placeShip(9, 1, gameboard.shipList.get(0), true);
-            gameboard.placeShip(1, 0, gameboard.shipList.get(1), false);
-            gameboard.placeShip(5, 6, gameboard.shipList.get(2), true);
-            gameboard.placeShip(0, 6, gameboard.shipList.get(3), true);
-            gameboard.placeShip(2, 4, gameboard.shipList.get(4), false);
-            gameboard.placeShip(7, 0, gameboard.shipList.get(5), true);
-            gameboard.placeShip(8, 9, gameboard.shipList.get(6), false);
-            gameboard.placeShip(9, 7, gameboard.shipList.get(7), true);
-            gameboard.placeShip(0, 2, gameboard.shipList.get(8), true);
-            gameboard.placeShip(3, 8, gameboard.shipList.get(9), false);
-        }
-    */
+    public Ship getLastSunkenShip() {
+        return lastSunkenShip;
+    }
 
     public void placeShipsRandom(){
         int row, col;
@@ -53,7 +48,5 @@ public class ComputerPlayer extends Player {
                 orientation = random.nextInt(10) >= 5;
             } while (!gameboard.placeShip(row, col, ship, orientation));
         }
-
     }
-
 }
