@@ -1,11 +1,10 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
-    private String[][] board;
+    String[][] board;
     private ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
@@ -38,6 +37,11 @@ public class Gameboard {
             endRow = startRow + ship.getLength() - 1;
         }
 
+        // Überprüfen, ob das Schiff innerhalb der Spielfeldgrenzen liegt
+        if (endRow >= size || endCol >= size) {
+            return false; // Verhindert das Platzieren des Schiffs außerhalb des Spielfelds
+        }
+
         if (isPlacementValid(startRow, startCol, endRow, endCol, ship)) {
             if (isHorizontal) {
                 for (int col = startCol; col <= endCol; col++) {
@@ -57,10 +61,13 @@ public class Gameboard {
     }
 
     private boolean isPlacementValid(int startRow, int startCol, int endRow, int endCol, Ship ship) {
-        if (endRow >= size || endCol >= size) {
+        // Überprüfen, ob das Schiff die Grenzen des Spielfelds überschreiten würde
+        if (startRow < 0 || startCol < 0 || endRow >= size || endCol >= size) {
             return false;
         }
-        if (startRow == endRow) { // Horizontal placement
+
+        // Horizontal placement
+        if (startRow == endRow) {
             for (int col = startCol; col <= endCol; col++) {
                 if (!board[startRow][col].equals("~~")) {
                     return false;
