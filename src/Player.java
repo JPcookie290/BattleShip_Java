@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Player {
     protected String name;
     protected Gameboard gameboard;
@@ -31,6 +34,9 @@ public class Player {
             for (Ship ship : enemyBoard.getShipList()) {
                 if (ship.isSunken()) {
                     lastSunkenShip = ship;
+                    for (ArrayList<Integer> pos : ship.getCurrentPos()) {
+                        enemyBoard.board[pos.get(0)][pos.get(1)] = "SS";
+                    }
                     enemyBoard.removeShip(ship);
 
                     if (checkWon()) {

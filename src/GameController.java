@@ -68,8 +68,9 @@ public class GameController {
 
     public void computerTakeShot() {
         String result = computer.takeRandomShot();
+        // TODO: if ship is sunk change color to red
         gameboardUI.updateAfterComputerShot(playerBoard);
-        
+
         if (result.equals("Hit and sunk!")) {
             Ship sunkenShip = computer.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Computer");
