@@ -19,12 +19,13 @@ public class Player {
     }
 
     public String takeShot(int row, int col) {
+        String result;
         // Check taken Shot
         if (row < 0 || col < 0 || row >= enemyBoard.getSize() || col >= enemyBoard.getSize()) {
-            return "Invalid shot";
+            return  "Invalid";
         }
+        result = enemyBoard.takeShot(row, col);
 
-        String result = enemyBoard.takeShot(row, col);
 
         if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
             for (Ship ship : enemyBoard.getShipList()) {

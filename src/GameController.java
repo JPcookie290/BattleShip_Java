@@ -51,11 +51,13 @@ public class GameController {
         if (result.equals("Hit and sunk!")) {
             Ship sunkenShip = player.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Player");
+            //gameboardUI.changeColorSunkenShip(sunkenShip);
         }
+        System.out.println(result);
 
         if (player.checkWon()) {
             gameboardUI.showGameEndMessage("Player won!");
-        } else {
+        } else if (!result.contains("Invalid")){
             computerTakeShot();
         }
     }

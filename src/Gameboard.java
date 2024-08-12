@@ -89,7 +89,7 @@ public class Gameboard {
             board[row][col] = "oo";
             return "Miss!";
         } else if (board[row][col].contains("XX") || board[row][col].contains("oo")) {
-            return "Already shot here!";
+            return "Invalid";
         } else {
             for (Ship ship : shipList) {
                 for (ArrayList<Integer> pos : ship.getCurrentPos()) {
