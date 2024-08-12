@@ -4,7 +4,6 @@ import java.util.Random;
 public class ComputerPlayer extends Player {
     private ArrayList<ArrayList<Integer>> shotsTaken;
     private Random random;
-    private Ship lastSunkenShip;
 
     public ComputerPlayer(String name, Gameboard gameboard, Gameboard enemyBoard) {
         super(name, gameboard, enemyBoard);
@@ -12,7 +11,7 @@ public class ComputerPlayer extends Player {
         this.random = new Random();
     }
 
-    public void takeRandomShot() {
+    public String takeRandomShot() {
         int row, col;
         ArrayList<Integer> shot;
 
@@ -25,17 +24,11 @@ public class ComputerPlayer extends Player {
         } while (shotsTaken.contains(shot));
 
         shotsTaken.add(shot);
-        String result = takeShot(row, col);
         // System.out.println("Computer shot at (" + row + ", " + col + "): " + result);
 
-        if (result.equals("Hit and sunk!")) {
-            // add ship to lastSunkenShip....
-        }
+        return takeShot(row, col);
     }
 
-    public Ship getLastSunkenShip() {
-        return lastSunkenShip;
-    }
 
     public void placeShipsRandom(){
         int row, col;

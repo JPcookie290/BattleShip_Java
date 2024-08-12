@@ -8,6 +8,7 @@ public class Player {
         this.name = name;
         this.gameboard = gameboard;
         this.enemyBoard = enemyBoard;
+        this.lastSunkenShip = null;
     }
 
     public String getName() {
@@ -25,7 +26,6 @@ public class Player {
             return  "Invalid";
         }
         result = enemyBoard.takeShot(row, col);
-
 
         if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
             for (Ship ship : enemyBoard.getShipList()) {

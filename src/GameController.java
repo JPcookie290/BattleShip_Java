@@ -67,13 +67,11 @@ public class GameController {
     }
 
     public void computerTakeShot() {
-        computer.takeRandomShot();
+        String result = computer.takeRandomShot();
         gameboardUI.updateAfterComputerShot(playerBoard);
-
-        Ship sunkenShip = computer.getLastSunkenShip();
-       // System.out.println(sunkenShip);
-        if (sunkenShip != null) {
-            System.out.println("test");
+        
+        if (result.equals("Hit and sunk!")) {
+            Ship sunkenShip = computer.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Computer");
         }
 
