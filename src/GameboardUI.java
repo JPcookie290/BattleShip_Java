@@ -128,13 +128,14 @@ public class GameboardUI {
     public void showSunkMessage(Ship sunkenShip, String whoSunk) {
         if (sunkenShip != null) {
             statusLabel.setText(whoSunk + " sunk a " + sunkenShip.title + "!");
-            for (ArrayList<Integer> pos : sunkenShip.getCurrentPos()) {
-                if (whoSunk.equals("Player")) {
-                    computerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
-                } else {
-                    playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
-                }
-            }
+            // not working
+            // for (ArrayList<Integer> pos : sunkenShip.getCurrentPos()) {
+            //    if (whoSunk.equals("Player")) {
+            //        computerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
+            //    } else {
+            //        playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
+            //    }
+            // }
         }
     }
 
