@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Gameboard {
     private final int size;
     private ArrayList<String> missed;
-    String[][] board;
+    public String[][] board;
     private ArrayList<Ship> shipList;
 
     public Gameboard(int size) {
@@ -37,9 +37,8 @@ public class Gameboard {
             endRow = startRow + ship.getLength() - 1;
         }
 
-        // Überprüfen, ob das Schiff innerhalb der Spielfeldgrenzen liegt
         if (endRow >= size || endCol >= size) {
-            return false; // Verhindert das Platzieren des Schiffs außerhalb des Spielfelds
+            return false;
         }
 
         if (isPlacementValid(startRow, startCol, endRow, endCol, ship)) {
@@ -61,7 +60,6 @@ public class Gameboard {
     }
 
     private boolean isPlacementValid(int startRow, int startCol, int endRow, int endCol, Ship ship) {
-        // Überprüfen, ob das Schiff die Grenzen des Spielfelds überschreiten würde
         if (startRow < 0 || startCol < 0 || endRow >= size || endCol >= size) {
             return false;
         }
