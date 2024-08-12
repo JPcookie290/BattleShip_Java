@@ -26,10 +26,10 @@ public class ComputerPlayer extends Player {
 
         shotsTaken.add(shot);
         String result = takeShot(row, col);
-        System.out.println("Computer shot at (" + row + ", " + col + "): " + result);
+        // System.out.println("Computer shot at (" + row + ", " + col + "): " + result);
 
         if (result.equals("Hit and sunk!")) {
-            lastSunkenShip = getLastSunkenShip();
+            // add ship to lastSunkenShip....
         }
     }
 

@@ -51,13 +51,17 @@ public class GameController {
         if (result.equals("Hit and sunk!")) {
             Ship sunkenShip = player.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Player");
-            //gameboardUI.changeColorSunkenShip(sunkenShip);
+        } else if (result.equals("Hit!")) {
+            gameboardUI.updateStatusLabel("Hit a ship!");
+        } else {
+            gameboardUI.updateStatusLabel(" ");
         }
-        System.out.println(result);
 
         if (player.checkWon()) {
             gameboardUI.showGameEndMessage("Player won!");
-        } else if (!result.contains("Invalid")){
+        } else if (result.contains("Invalid")){
+            gameboardUI.updateStatusLabel("Already shot here!");
+        } else {
             computerTakeShot();
         }
     }
@@ -67,7 +71,9 @@ public class GameController {
         gameboardUI.updateAfterComputerShot(playerBoard);
 
         Ship sunkenShip = computer.getLastSunkenShip();
+       // System.out.println(sunkenShip);
         if (sunkenShip != null) {
+            System.out.println("test");
             gameboardUI.showSunkMessage(sunkenShip, "Computer");
         }
 

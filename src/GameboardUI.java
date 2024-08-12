@@ -107,9 +107,9 @@ public class GameboardUI {
 
     public void updateAfterPlayerShot(int row, int col, String result) {
         if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
-            computerPanels[row][col].setBackground(Color.RED);
+            computerPanels[row][col].setBackground(Color.orange);
         } else if (result.equals("Miss!")) {
-            computerPanels[row][col].setBackground(Color.WHITE);
+            computerPanels[row][col].setBackground(Color.lightGray);
         }
     }
 
@@ -117,9 +117,9 @@ public class GameboardUI {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (playerBoard.board[i][j].equals("XX")) {
-                    playerPanels[i][j].setBackground(Color.RED);
+                    playerPanels[i][j].setBackground(Color.orange);
                 } else if (playerBoard.board[i][j].equals("oo")) {
-                    playerPanels[i][j].setBackground(Color.WHITE);
+                    playerPanels[i][j].setBackground(Color.lightGray);
                 }
             }
         }
@@ -128,20 +128,15 @@ public class GameboardUI {
     public void showSunkMessage(Ship sunkenShip, String whoSunk) {
         if (sunkenShip != null) {
             statusLabel.setText(whoSunk + " sunk a " + sunkenShip.title + "!");
-        }
-    }
-
-    // not working
-    public void changeColorSunkenShip(Ship sunkenShip){
-        System.out.println((sunkenShip.getCurrentPos()));
-
-        /* for (ArrayList<Integer> pos : sunkenShip.getCurrentPos()) {
-            if (whoSunk.equals("Player")) {
-                computerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
-            } else {
-                playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.BLACK);
+            for (ArrayList<Integer> pos : sunkenShip.getCurrentPos()) {
+                if (whoSunk.equals("Player")) {
+                    computerPanels[pos.get(0)][pos.get(1)].setBackground(Color.red);
+                } else {
+                    System.out.println("Computer sunk a Ship");
+                    playerPanels[pos.get(0)][pos.get(1)].setBackground(Color.red);
+                }
             }
-         } */
+        }
     }
 
     public void showGameEndMessage(String message) {
@@ -157,7 +152,7 @@ public class GameboardUI {
     private void restartGame() {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(statusLabel);
         frame.getContentPane().removeAll();
-        controller = new GameController(); // new Game COntroller
+        controller = new GameController(); // new Game Controller
         frame.dispose();
     }
 

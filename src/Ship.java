@@ -38,11 +38,13 @@ public class Ship {
     }
 
     public void hit(int row, int col) {
+        /*
         ArrayList<Integer> takenHit = new ArrayList<>();
         takenHit.add(row);
         takenHit.add(col);
-
         currentPos.set(currentPos.indexOf(takenHit), new ArrayList<>(Arrays.asList( -1, -1)));
+        */
+
         hits++;
         if (hits == length) {
             sunken = true;
