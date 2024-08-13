@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Player {
     protected String name;
     protected Gameboard gameboard;
@@ -8,6 +11,7 @@ public class Player {
         this.name = name;
         this.gameboard = gameboard;
         this.enemyBoard = enemyBoard;
+        this.lastSunkenShip = null;
     }
 
     public String getName() {
@@ -26,11 +30,13 @@ public class Player {
         }
         result = enemyBoard.takeShot(row, col);
 
-
         if (result.equals("Hit!") || result.equals("Hit and sunk!")) {
             for (Ship ship : enemyBoard.getShipList()) {
                 if (ship.isSunken()) {
                     lastSunkenShip = ship;
+                    for (ArrayList<Integer> pos : ship.getCurrentPos()) {
+                        enemyBoard.board[pos.get(0)][pos.get(1)] = "SS";
+                    }
                     enemyBoard.removeShip(ship);
 
                     if (checkWon()) {

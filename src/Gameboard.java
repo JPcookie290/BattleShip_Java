@@ -88,7 +88,7 @@ public class Gameboard {
             missed.add(row + "," + col);
             board[row][col] = "oo";
             return "Miss!";
-        } else if (board[row][col].contains("XX") || board[row][col].contains("oo")) {
+        } else if (board[row][col].contains("XX") || board[row][col].contains("oo") || board[row][col].contains("SS")) {
             return "Invalid";
         } else {
             for (Ship ship : shipList) {

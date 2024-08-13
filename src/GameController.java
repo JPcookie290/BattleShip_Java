@@ -36,6 +36,7 @@ public class GameController {
             if (shipIndex >= playerBoard.getShipList().size()) {
                 isPlacingShips = false;
                 gameboardUI.startGame();
+
             } else {
                 gameboardUI.updateStatusLabel("Place the next ship.");
             }
@@ -51,6 +52,7 @@ public class GameController {
         if (result.equals("Hit and sunk!")) {
             Ship sunkenShip = player.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Player");
+            gameboardUI.updateInfoControl(computerBoard.getShipList(), "Computer");
         } else if (result.equals("Hit!")) {
             gameboardUI.updateStatusLabel("Hit a ship!");
         } else {
@@ -67,15 +69,31 @@ public class GameController {
     }
 
     public void computerTakeShot() {
-        computer.takeRandomShot();
+        //String result = computer.takeRandomShot();
+        String result;
+
+        if (!computer.getFoundShip()){
+            result = computer.takeRandomShot();
+        } else {
+            result = computer.takeCalculatedShot();
+        }
         gameboardUI.updateAfterComputerShot(playerBoard);
 
-        Ship sunkenShip = computer.getLastSunkenShip();
-       // System.out.println(sunkenShip);
-        if (sunkenShip != null) {
-            System.out.println("test");
+        if (result.equals("Hit and sunk!")) {
+            computer.setFoundShip(false);
+            Ship sunkenShip = computer.getLastSunkenShip();
             gameboardUI.showSunkMessage(sunkenShip, "Computer");
+            gameboardUI.updateInfoControl(playerBoard.getShipList(), "Player");
         }
+
+        if (result.equals("Hit!")){
+            if (!computer.getFoundShip()){
+                computer.setFirstHitShip();
+                computer.setFoundShip(true);
+            }
+            computer.setPreviousHitShip();
+        }
+
 
         if (computer.checkWon()) {
             gameboardUI.showGameEndMessage("Computer won!");
