@@ -11,6 +11,8 @@ public class GameboardUI {
     private JPanel[][] computerPanels;
     private JLabel statusLabel;
     private JCheckBox horizontalCheckBox;
+    private JLabel infoShipsRemainingComputer;
+    private JLabel infoShipsRemainingPlayer;
 
     public GameboardUI(GameController controller) {
         this.controller = controller;
@@ -18,7 +20,7 @@ public class GameboardUI {
 
     public void createAndShowGUI() {
         JFrame frame = new JFrame("Battle Ships");
-        frame.setSize(900, 500);
+        frame.setSize(950, 600);
         frame.setLayout(new BorderLayout(10, 10));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -35,13 +37,45 @@ public class GameboardUI {
         horizontalCheckBox.setFont(new Font("Monospaced", Font.PLAIN, 16));
         horizontalCheckBox.setSelected(true);
 
+        infoShipsRemainingComputer = new JLabel("The computer has 10 ships remaining.");
+        infoShipsRemainingComputer.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        infoShipsRemainingPlayer = new JLabel("You have 10 ships remaining.");
+        infoShipsRemainingPlayer.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
         JPanel controlPanel = new JPanel();
-        controlPanel.setLayout(new BorderLayout());
-        controlPanel.add(horizontalCheckBox, BorderLayout.NORTH);
+        controlPanel.setPreferredSize(new Dimension(450,50));
+        controlPanel.setLayout(new GridLayout(1,3));
+        controlPanel.setBorder(BorderFactory.createEmptyBorder(0,20,20,0));
+
+        controlPanel.add(infoShipsRemainingPlayer);
+        infoShipsRemainingPlayer.setVisible(false);
+        controlPanel.add(horizontalCheckBox, BorderLayout.CENTER);
+        controlPanel.add(infoShipsRemainingComputer);
+        infoShipsRemainingComputer.setVisible(false);
+
+
+
+        JPanel notificationPanel = new JPanel();
+        notificationPanel.setLayout( new GridLayout(2,1));
+        JLabel playerLabel = new JLabel("Player-Board:", SwingConstants.CENTER);
+        playerLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        JLabel computerLabel = new JLabel("Computer-Board:", SwingConstants.CENTER);
+        computerLabel.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
         statusLabel = new JLabel("Place your ships on the board.", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Monospaced", Font.BOLD, 18));
-        frame.add(statusLabel, BorderLayout.NORTH);
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridLayout(1,2));
+        infoPanel.add(playerLabel);
+        infoPanel.add(computerLabel);
+
+        notificationPanel.add(statusLabel);
+        notificationPanel.add(infoPanel);
+
+        //frame.add(statusLabel, BorderLayout.NORTH);
+        frame.add(notificationPanel, BorderLayout.NORTH);
 
         // Player Panels
         for (int i = 0; i < 10; i++) {
@@ -142,6 +176,14 @@ public class GameboardUI {
         }
     }
 
+    public void updateInfoControl(ArrayList<Ship> ships, String shipOwner){
+        if (shipOwner.contains("Computer")){
+            infoShipsRemainingComputer.setText("The Computer has " + ships.size() + " ships remaining.");
+        } else if (shipOwner.equals("Player")) {
+            infoShipsRemainingPlayer.setText("You have " + ships.size() + " ships remaining.");
+        }
+    }
+
     public void showGameEndMessage(String message) {
         int response = JOptionPane.showConfirmDialog(null, message + " Would you like to play again?", "Game Over",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -161,6 +203,9 @@ public class GameboardUI {
 
     public void startGame() {
         updateStatusLabel("All ships placed. Game started!");
+        horizontalCheckBox.setVisible(false);
+        infoShipsRemainingPlayer.setVisible(true);
+        infoShipsRemainingComputer.setVisible(true);
     }
 
     public void updateStatusLabel(String message) {
