@@ -28,7 +28,7 @@ public class ComputerPlayer extends Player {
     }
 
     public void setPreviousHitShip(){
-        previousHitShip = shotsTaken.getLast();
+        previousHitShip = shotsTaken.get(shotsTaken.size()-1);
     }
 
     public void setFirstHitShip(){
@@ -114,17 +114,4 @@ public class ComputerPlayer extends Player {
         return possibleShots;
     }
 
-
-    public void placeShipsRandom(){
-        int row, col;
-        boolean orientation;
-        ArrayList<Ship> shipList = gameboard.getShipList();
-        for (Ship ship : shipList){
-            do {
-                row = random.nextInt(gameboard.getSize());
-                col = random.nextInt(gameboard.getSize());
-                orientation = random.nextInt(10) >= 5;
-            } while (!gameboard.placeShip(row, col, ship, orientation));
-        }
-    }
 }

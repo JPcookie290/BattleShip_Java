@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ public class GameboardUI {
     private JPanel[][] playerPanels;
     private JPanel[][] computerPanels;
     private JLabel statusLabel;
-    private JCheckBox horizontalCheckBox;
+    private JButton randomPlacement;
     private JLabel infoShipsRemainingComputer;
     private JLabel infoShipsRemainingPlayer;
 
@@ -33,9 +35,18 @@ public class GameboardUI {
         board1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         board2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        horizontalCheckBox = new JCheckBox("Horizontal");
-        horizontalCheckBox.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        horizontalCheckBox.setSelected(true);
+        randomPlacement = new JButton("randomize ship placement");
+        randomPlacement.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
+        //TODO: Implementation of randomize ship placement button
+        randomPlacement.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Button test");
+                controller.placeRandomPlayerShips();
+            }
+        });
+
 
         infoShipsRemainingComputer = new JLabel("The computer has 10 ships remaining.");
         infoShipsRemainingComputer.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -50,7 +61,7 @@ public class GameboardUI {
 
         controlPanel.add(infoShipsRemainingPlayer);
         infoShipsRemainingPlayer.setVisible(false);
-        controlPanel.add(horizontalCheckBox, BorderLayout.CENTER);
+        controlPanel.add(randomPlacement, BorderLayout.CENTER);
         controlPanel.add(infoShipsRemainingComputer);
         infoShipsRemainingComputer.setVisible(false);
 
@@ -85,9 +96,16 @@ public class GameboardUI {
                 playerPanels[i][j].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
+
                         if (controller.isPlacingShips()) {
-                            boolean isHorizontal = horizontalCheckBox.isSelected();
-                            controller.placePlayerShip(finalI, finalJ, isHorizontal);
+                            if (e.getButton() == MouseEvent.BUTTON1){
+                                //System.out.println("test left");
+                                controller.placePlayerShip(finalI, finalJ, true);
+                            }
+                            if (e.getButton() == MouseEvent.BUTTON3){
+                                //System.out.println("test right");
+                                controller.placePlayerShip(finalI, finalJ, false);
+                            }
                         }
                     }
                 });
@@ -203,7 +221,7 @@ public class GameboardUI {
 
     public void startGame() {
         updateStatusLabel("All ships placed. Game started!");
-        horizontalCheckBox.setVisible(false);
+        randomPlacement.setVisible(false);
         infoShipsRemainingPlayer.setVisible(true);
         infoShipsRemainingComputer.setVisible(true);
     }

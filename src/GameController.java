@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class GameController {
     private Gameboard playerBoard;
     private Gameboard computerBoard;
@@ -45,6 +47,17 @@ public class GameController {
         }
     }
 
+    //TODO: rework for better use
+    public void placeRandomPlayerShips(){
+        player.placeShipsRandom();
+        ArrayList<Ship> currentShips = playerBoard.getShipList();
+        for (Ship ship : currentShips) {
+            gameboardUI.updatePlayerShipPlacement(ship);
+        }
+        isPlacingShips = false;
+        gameboardUI.startGame();
+    }
+
     private void handlePlayerShot(int row, int col) {
         String result = player.takeShot(row, col);
         gameboardUI.updateAfterPlayerShot(row, col, result);
@@ -69,7 +82,6 @@ public class GameController {
     }
 
     public void computerTakeShot() {
-        //String result = computer.takeRandomShot();
         String result;
 
         if (!computer.getFoundShip()){

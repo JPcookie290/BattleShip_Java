@@ -94,7 +94,7 @@ public class Gameboard {
             for (Ship ship : shipList) {
                 for (ArrayList<Integer> pos : ship.getCurrentPos()) {
                     if (pos.get(0) == row && pos.get(1) == col) {
-                        ship.hit(row, col);
+                        ship.hit();
                         board[row][col] = "XX";
                         return ship.isSunken() ? "Hit and sunk!" : "Hit!";
                     }
