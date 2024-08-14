@@ -137,6 +137,7 @@ public class GameboardUI {
         frame.setVisible(true);
     }
 
+    /* ---------- creates start button ---------- */
     private static @NotNull JButton getStartButton() {
         JButton startButton = new JButton("start game");
         startButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
@@ -152,6 +153,7 @@ public class GameboardUI {
         return startButton;
     }
 
+    /* ---------- creates random placement button ---------- */
     private @NotNull JButton getRandomPlacement() {
         JButton randomPlacement = new JButton("randomize ship placement");
         randomPlacement.setFont(new Font("Monospaced", Font.PLAIN, 16));
@@ -167,6 +169,7 @@ public class GameboardUI {
         return randomPlacement;
     }
 
+    /* ---------- creates reset button ---------- */
     private @NotNull JButton getResetButton() {
         JButton resetButton = new JButton("reset ships");
         resetButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
