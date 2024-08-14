@@ -28,11 +28,11 @@ public class ComputerPlayer extends Player {
     }
 
     public void setPreviousHitShip(){
-        previousHitShip = shotsTaken.get(shotsTaken.size()-1);
+        previousHitShip = shotsTaken.get(shotsTaken.size() - 1);
     }
 
     public void setFirstHitShip(){
-        firstHitShip = shotsTaken.getLast();
+        firstHitShip = shotsTaken.get(shotsTaken.size() - 1);
     }
 
     public String takeRandomShot() {

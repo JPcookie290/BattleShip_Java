@@ -54,17 +54,19 @@ public class Player {
         return result;
     }
 
-    //TODO: Check if it is working correctly
     public void placeShipsRandom(){
         int row, col;
         boolean orientation;
         ArrayList<Ship> shipList = gameboard.getShipList();
+        ArrayList<Ship> placedShips = gameboard.getPlacedShips();
         for (Ship ship : shipList){
-            do {
-                row = random.nextInt(gameboard.getSize());
-                col = random.nextInt(gameboard.getSize());
-                orientation = random.nextInt(10) >= 5;
-            } while (!gameboard.placeShip(row, col, ship, orientation));
+            if (!placedShips.contains(ship)){
+                do {
+                    row = random.nextInt(gameboard.getSize());
+                    col = random.nextInt(gameboard.getSize());
+                    orientation = random.nextInt(10) >= 5;
+                } while (!gameboard.placeShip(row, col, ship, orientation));
+            }
         }
     }
 

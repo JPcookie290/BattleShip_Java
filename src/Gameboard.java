@@ -6,12 +6,14 @@ public class Gameboard {
     private ArrayList<String> missed;
     public String[][] board;
     private ArrayList<Ship> shipList;
+    private ArrayList<Ship> placedShips;
 
     public Gameboard(int size) {
         this.size = size;
         this.missed = new ArrayList<>();
         this.board = new String[size][size];
         this.shipList = createShips();
+        this.placedShips = new ArrayList<>();
         createBoard();
     }
 
@@ -53,6 +55,7 @@ public class Gameboard {
                     ship.setCurrentPos(row, startCol);
                 }
             }
+            placedShips.add(ship);
             return true;
         }
 
@@ -122,6 +125,13 @@ public class Gameboard {
         list.add(new Ship(2, "D4","Destroyer"));
         return list;
     }
+
+    public void resetShips(){
+        shipList = createShips();
+        placedShips = new ArrayList<>();
+    }
+
+    public ArrayList<Ship> getPlacedShips(){ return placedShips; }
 
     public ArrayList<Ship> getShipList() { return shipList; }
 

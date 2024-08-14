@@ -38,7 +38,6 @@ public class GameController {
             if (shipIndex >= playerBoard.getShipList().size()) {
                 isPlacingShips = false;
                 gameboardUI.startGame();
-
             } else {
                 gameboardUI.updateStatusLabel("Place the next ship.");
             }
@@ -47,7 +46,6 @@ public class GameController {
         }
     }
 
-    //TODO: rework for better use
     public void placeRandomPlayerShips(){
         player.placeShipsRandom();
         ArrayList<Ship> currentShips = playerBoard.getShipList();
@@ -114,5 +112,9 @@ public class GameController {
 
     public Gameboard getPlayerBoard() {
         return playerBoard;
+    }
+
+    public void resetShips() {
+        playerBoard.resetShips();
     }
 }
