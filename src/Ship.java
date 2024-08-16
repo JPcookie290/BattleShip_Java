@@ -18,6 +18,15 @@ public class Ship {
         this.title = title;
     }
 
+    /* ---------- Setter functions ---------- */
+    public void setCurrentPos(int row, int col) {
+        ArrayList<Integer> positions = new ArrayList<>();
+        positions.add(row);
+        positions.add(col);
+        currentPos.add(positions);
+    }
+
+    /* ---------- Getter functions ---------- */
     public int getLength() {
         return length;
     }
@@ -26,19 +35,13 @@ public class Ship {
         return currentPos;
     }
 
+    /* ---------- return boolean for check in gameboard, if ship is sunken ---------- */
     public boolean isSunken() {
         return sunken;
     }
 
-    public void setCurrentPos(int row, int col) {
-        ArrayList<Integer> positions = new ArrayList<>();
-        positions.add(row);
-        positions.add(col);
-        currentPos.add(positions);
-    }
-
+    /* ---------- hit function ---------- */
     public void hit() {
-
         hits++;
         if (hits == length) {
             sunken = true;

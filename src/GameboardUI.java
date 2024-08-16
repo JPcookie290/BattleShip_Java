@@ -18,6 +18,7 @@ public class GameboardUI {
     private JPanel infoView;
     private JLabel infoShipsRemainingComputer;
     private JLabel infoShipsRemainingPlayer;
+    private JPanel board1;
 
     /* ---------- initializes the game controller component ---------- */
     public GameboardUI(GameController controller) {
@@ -37,7 +38,7 @@ public class GameboardUI {
         computerPanels = new JPanel[10][10];
 
         /* ---------- creates the boards ---------- */
-        JPanel board1 = createGrid(playerPanels);
+        board1 = createGrid(playerPanels);
         JPanel board2 = createGrid(computerPanels);
 
         board1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -137,17 +138,15 @@ public class GameboardUI {
         frame.setVisible(true);
     }
 
-    /* ---------- creates start button ---------- */
-    private static @NotNull JButton getStartButton() {
+    private @NotNull JButton getStartButton() {
         JButton startButton = new JButton("start game");
         startButton.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
-        /* ---------- adds action to start button ---------- */
+        /* ---------- adds action to the random placement button ---------- */
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: Implement logic
-                System.out.println("test: start button");
+                controller.startGame();
             }
         });
         return startButton;
@@ -162,7 +161,6 @@ public class GameboardUI {
         randomPlacement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // System.out.println("Button test");
                 controller.placeRandomPlayerShips();
             }
         });
@@ -178,9 +176,8 @@ public class GameboardUI {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // System.out.println("test: reset button");
+                // TODO: UI implementation
                 controller.resetShips();
-                playerPanels = new JPanel[10][10];
             }
         });
         return resetButton;
@@ -313,7 +310,6 @@ public class GameboardUI {
 
     /* ---------- start game function ---------- */
     public void startGame() {
-        updateStatusLabel("All ships placed. Game started!");
         buttonView.setVisible(false);
         infoView.setVisible(true);
     }
@@ -327,3 +323,4 @@ public class GameboardUI {
         return controller.isPlacingShips();
     }
 }
+

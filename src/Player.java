@@ -18,6 +18,7 @@ public class Player {
         this.lastSunkenShip = null;
     }
 
+    /* ---------- Getter functions ---------- */
     public String getName() {
         return name;
     }
@@ -26,6 +27,7 @@ public class Player {
         return gameboard;
     }
 
+    /* ---------- takeShot function ---------- */
     public String takeShot(int row, int col) {
         String result;
         // Check taken Shot
@@ -41,6 +43,8 @@ public class Player {
                     for (ArrayList<Integer> pos : ship.getCurrentPos()) {
                         enemyBoard.board[pos.get(0)][pos.get(1)] = "SS";
                     }
+
+                    // removes ship from placedShips
                     enemyBoard.removeShip(ship);
 
                     if (checkWon()) {
@@ -68,6 +72,8 @@ public class Player {
                 } while (!gameboard.placeShip(row, col, ship, orientation));
             }
         }
+
+
     }
 
     public boolean checkWon() {

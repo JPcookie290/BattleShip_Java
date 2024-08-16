@@ -1,3 +1,4 @@
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GameController {
@@ -35,9 +36,9 @@ public class GameController {
         if (playerBoard.placeShip(row, col, currentShip, isHorizontal)) {
             gameboardUI.updatePlayerShipPlacement(currentShip);
             shipIndex++;
-            if (shipIndex >= playerBoard.getShipList().size()) {
+            if (playerBoard.getPlacedShips().size() >= playerBoard.getShipList().size()) {
                 isPlacingShips = false;
-                gameboardUI.startGame();
+                gameboardUI.updateStatusLabel("All ships have been placed! Click the start button.");
             } else {
                 gameboardUI.updateStatusLabel("Place the next ship.");
             }
@@ -53,7 +54,7 @@ public class GameController {
             gameboardUI.updatePlayerShipPlacement(ship);
         }
         isPlacingShips = false;
-        gameboardUI.startGame();
+        gameboardUI.updateStatusLabel("All ships have been placed! Click the start button.");
     }
 
     private void handlePlayerShot(int row, int col) {
@@ -114,7 +115,20 @@ public class GameController {
         return playerBoard;
     }
 
+    public void startGame(){
+        if (isPlacingShips()){
+            gameboardUI.updateStatusLabel("Not all ships have been placed!");
+        } else {
+            gameboardUI.startGame();;
+        }
+    }
+
     public void resetShips() {
-        playerBoard.resetShips();
+        System.out.println("before reset:");
+        playerBoard.printInfo();
+        playerBoard = new Gameboard(10);
+        System.out.println("after reset:");
+        playerBoard.printInfo();
     }
 }
+
