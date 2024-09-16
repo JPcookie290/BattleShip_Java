@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class ComputerPlayer extends Player {
@@ -8,6 +7,7 @@ public class ComputerPlayer extends Player {
     private ArrayList<Integer> previousHitShip;
     private ArrayList<Integer> firstHitShip;
     private boolean foundShip;
+    private boolean easyMode = false;
 
     public ComputerPlayer(String name, Gameboard gameboard, Gameboard enemyBoard) {
         super(name, gameboard, enemyBoard);
@@ -28,11 +28,11 @@ public class ComputerPlayer extends Player {
     }
 
     public void setPreviousHitShip(){
-        previousHitShip = shotsTaken.getLast();
+        previousHitShip = shotsTaken.get(shotsTaken.size() - 1);
     }
 
     public void setFirstHitShip(){
-        firstHitShip = shotsTaken.getLast();
+        firstHitShip = shotsTaken.get(shotsTaken.size() - 1);
     }
 
     public String takeRandomShot() {
@@ -114,17 +114,10 @@ public class ComputerPlayer extends Player {
         return possibleShots;
     }
 
-
-    public void placeShipsRandom(){
-        int row, col;
-        boolean orientation;
-        ArrayList<Ship> shipList = gameboard.getShipList();
-        for (Ship ship : shipList){
-            do {
-                row = random.nextInt(gameboard.getSize());
-                col = random.nextInt(gameboard.getSize());
-                orientation = random.nextInt(10) >= 5;
-            } while (!gameboard.placeShip(row, col, ship, orientation));
-        }
+    public void setEasyMode(boolean easyMode) {
+        this.easyMode = easyMode;
     }
+
+    public boolean isEasyMode() {return easyMode;}
 }
+

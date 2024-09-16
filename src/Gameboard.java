@@ -6,15 +6,18 @@ public class Gameboard {
     private ArrayList<String> missed;
     public String[][] board;
     private ArrayList<Ship> shipList;
+    private ArrayList<Ship> placedShips;
 
     public Gameboard(int size) {
         this.size = size;
         this.missed = new ArrayList<>();
         this.board = new String[size][size];
         this.shipList = createShips();
+        this.placedShips = new ArrayList<>();
         createBoard();
     }
 
+    /* ---------- creates the board ---------- */
     private void createBoard() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -23,10 +26,7 @@ public class Gameboard {
         }
     }
 
-    public int getSize() {
-        return size;
-    }
-
+    /* ---------- Function to place ship in the board ---------- */
     public boolean placeShip(int startRow, int startCol, Ship ship, boolean isHorizontal) {
         int endRow = startRow;
         int endCol = startCol;
@@ -53,12 +53,15 @@ public class Gameboard {
                     ship.setCurrentPos(row, startCol);
                 }
             }
+            placedShips.add(ship);
+            //shipList.remove(ship);
             return true;
         }
 
         return false;
     }
 
+    /* ---------- Function validation for the placement of the ship ---------- */
     private boolean isPlacementValid(int startRow, int startCol, int endRow, int endCol, Ship ship) {
         if (startRow < 0 || startCol < 0 || endRow >= size || endCol >= size) {
             return false;
@@ -83,6 +86,7 @@ public class Gameboard {
         return true;
     }
 
+    /* ---------- take shot function ---------- */
     public String takeShot(int row, int col) {
         if (board[row][col].equals("~~")) {
             missed.add(row + "," + col);
@@ -91,10 +95,10 @@ public class Gameboard {
         } else if (board[row][col].contains("XX") || board[row][col].contains("oo") || board[row][col].contains("SS")) {
             return "Invalid";
         } else {
-            for (Ship ship : shipList) {
+            for (Ship ship : placedShips) {
                 for (ArrayList<Integer> pos : ship.getCurrentPos()) {
                     if (pos.get(0) == row && pos.get(1) == col) {
-                        ship.hit(row, col);
+                        ship.hit();
                         board[row][col] = "XX";
                         return ship.isSunken() ? "Hit and sunk!" : "Hit!";
                     }
@@ -104,6 +108,7 @@ public class Gameboard {
         return "Error";
     }
 
+    /* ---------- create existing ships list ---------- */
     public ArrayList<Ship> createShips() {
         ArrayList<Ship> list = new ArrayList<>();
         // Carrier
@@ -123,16 +128,25 @@ public class Gameboard {
         return list;
     }
 
-    public ArrayList<Ship> getShipList() { return shipList; }
-
+    /* ---------- remove ship output ---------- */
     public void removeShip(Ship ship){
         shipList.remove(ship);
     }
+
+    /* ---------- Getter functions ---------- */
+    public int getSize() {
+        return size;
+    }
+
+    public ArrayList<Ship> getPlacedShips(){ return placedShips; }
+
+    public ArrayList<Ship> getShipList() { return shipList; }
 
     public ArrayList<String> getMissedShots() {
         return missed;
     }
 
+    /* ---------- Function for terminal output ---------- */
     public void printBoard() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -142,4 +156,45 @@ public class Gameboard {
         }
         System.out.println();
     }
+
+    public void printShipInfo(Ship ship){
+        System.out.println(ship.title);
+        if (!ship.getCurrentPos().isEmpty()) {
+            for (ArrayList<Integer> pos : ship.getCurrentPos()){
+                System.out.print(pos);
+            }
+            System.out.println();
+        } else {
+            System.out.println("currentPos is empty.");
+        }
+
+    }
+
+    public void printInfo(){
+        System.out.println("Gameboard:");
+        printBoard();
+        System.out.println("shiplist:");
+        for (Ship ship : shipList){
+            printShipInfo(ship);
+        }
+        System.out.println("placedShips:");
+        if (!placedShips.isEmpty()){
+            for (Ship ship : placedShips){
+                printShipInfo(ship);
+            }
+        } else {
+            System.out.println("placedShips is empty!");
+        }
+    }
+
+    public void resetBoard() {
+        createBoard();  // Resets the board array
+        placedShips.clear();  // Remove all placed ships
+        shipList = createShips();  // Reinitialize the ship list if needed
+        missed.clear();
+    }
+
 }
+
+
+
