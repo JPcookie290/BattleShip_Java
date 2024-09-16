@@ -186,6 +186,14 @@ public class Gameboard {
             System.out.println("placedShips is empty!");
         }
     }
+
+    public void resetBoard() {
+        createBoard();  // Resets the board array
+        placedShips.clear();  // Remove all placed ships
+        shipList = createShips();  // Reinitialize the ship list if needed
+        missed.clear();
+    }
+
 }
 
 

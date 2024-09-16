@@ -176,8 +176,8 @@ public class GameboardUI {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: UI implementation
-                controller.resetShips();
+                controller.resetShips(); // Reset ships logic in the controller
+                resetGameboard();        // Update UI to reflect the reset
             }
         });
         return resetButton;
@@ -304,7 +304,7 @@ public class GameboardUI {
     private void restartGame() {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(statusLabel);
         frame.getContentPane().removeAll();
-        controller = new GameController(); // new Game Controller
+        controller = new GameController(controller.getPlayerName(), controller.getGameMode()); // new Game Controller
         frame.dispose();
     }
 
@@ -322,5 +322,34 @@ public class GameboardUI {
     public boolean isPlacingShips() {
         return controller.isPlacingShips();
     }
+
+    /* ---------- Resets the gameboard after ships are reset ---------- */
+    public void resetGameboard() {
+        // Reset player panels
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                playerPanels[i][j].setBackground(new Color(147,186,240)); // Original color
+            }
+        }
+
+        // Reset computer panels
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                computerPanels[i][j].setBackground(new Color(147,186,240)); // Original color
+            }
+        }
+
+        // Update status label
+        updateStatusLabel("Place your ships on the board.");
+
+        // Optionally reset other game state indicators, such as remaining ships
+        infoShipsRemainingPlayer.setText("You have 10 ships remaining.");
+        infoShipsRemainingComputer.setText("The computer has 10 ships remaining.");
+
+        // Optionally show button panel again
+        buttonView.setVisible(true);
+        infoView.setVisible(false);
+    }
+
 }
 

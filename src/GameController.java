@@ -1,5 +1,6 @@
-import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
+
 
 public class GameController {
     private Gameboard playerBoard;
@@ -9,13 +10,19 @@ public class GameController {
     private GameboardUI gameboardUI;
     private int shipIndex = 0;
     private boolean isPlacingShips = true;
+    private String gameMode;  // Added game mode
+    private String playerName;
 
-    public GameController() {
+    public GameController(String playerName, String gameMode) {
         this.playerBoard = new Gameboard(10);
         this.computerBoard = new Gameboard(10);
-        this.player = new Player("Player", playerBoard, computerBoard);
+        this.player = new Player(playerName, playerBoard, computerBoard);
         this.computer = new ComputerPlayer("Computer", computerBoard, playerBoard);
         this.gameboardUI = new GameboardUI(this);
+
+        if (gameMode.equals("Easy")){
+            computer.setEasyMode(true);
+        }
 
         this.computer.placeShipsRandom();
         this.gameboardUI.createAndShowGUI();
@@ -85,9 +92,12 @@ public class GameController {
 
         if (!computer.getFoundShip()){
             result = computer.takeRandomShot();
+        } else if (computer.isEasyMode()){
+            result = computer.takeRandomShot();
         } else {
             result = computer.takeCalculatedShot();
         }
+
         gameboardUI.updateAfterComputerShot(playerBoard);
 
         if (result.equals("Hit and sunk!")) {
@@ -123,12 +133,19 @@ public class GameController {
         }
     }
 
+
     public void resetShips() {
-        System.out.println("before reset:");
-        playerBoard.printInfo();
-        playerBoard = new Gameboard(10);
-        System.out.println("after reset:");
-        playerBoard.printInfo();
+        playerBoard.resetBoard();
+
+        gameboardUI.resetGameboard();
+
+        isPlacingShips = true;
+        shipIndex = 0;
+        gameboardUI.updateStatusLabel("Place your ships on the board.");
     }
+
+    public String getPlayerName() {return playerName;}
+
+    public String getGameMode() {return gameMode;}
 }
 
